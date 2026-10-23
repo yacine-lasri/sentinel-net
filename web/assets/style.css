@@ -1,0 +1,232 @@
+/*
+ * assets/style.css
+ *
+ * ---------------------------------------------------------------
+ * THIS IS YOUR FILE TO CUSTOMISE.
+ * All the PHP and JavaScript is already done.
+ * Your job is to make this look good.
+ *
+ * The comments explain what each section controls.
+ * Change colours, fonts, sizes — anything you like.
+ * ---------------------------------------------------------------
+ */
+
+
+/* ── 1. Global reset and base font ──────────────────────────────
+   Controls the font and background colour of the whole page.     */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;   /* ← change the font here */
+    background-color: #0f172a;                     /* ← page background colour */
+    color: #e2e8f0;                                /* ← default text colour */
+    min-height: 100vh;
+}
+
+
+/* ── 2. Top navigation bar ───────────────────────────────────────
+   The bar at the very top with the SentinelNet logo.             */
+.navbar {
+    background-color: #1e293b;         /* ← navbar background */
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid #334155;  /* ← bottom border line */
+}
+
+.navbar-brand {
+    font-size: 22px;
+    font-weight: 700;
+    color: #38bdf8;                    /* ← logo text colour */
+    letter-spacing: 1px;
+}
+
+.navbar-status {
+    font-size: 13px;
+    color: #94a3b8;                    /* ← status text colour */
+}
+
+.status-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #22c55e;         /* ← green dot = online */
+    margin-right: 6px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.4; }
+}
+
+
+/* ── 3. Main content area ────────────────────────────────────────
+   The padding and max-width of the content below the navbar.     */
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 32px 24px;
+}
+
+
+/* ── 4. Section titles ───────────────────────────────────────────
+   The "Statistiques", "Alertes", "Trafic" headings.             */
+.section-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #94a3b8;                    /* ← section title colour */
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 16px;
+}
+
+
+/* ── 5. Stat cards (the 6 number boxes at the top) ──────────────
+   Each card shows one number: total packets, TCP count, etc.     */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 16px;
+    margin-bottom: 40px;
+}
+
+.stat-card {
+    background-color: #1e293b;         /* ← card background */
+    border: 1px solid #334155;         /* ← card border */
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+}
+
+.stat-card .stat-label {
+    font-size: 12px;
+    color: #64748b;                    /* ← label colour (e.g. "TCP") */
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.stat-card .stat-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: #f1f5f9;                    /* ← number colour */
+}
+
+/* Individual card accent colours — change these to your liking */
+.stat-card.card-total   { border-top: 3px solid #38bdf8; }  /* blue   */
+.stat-card.card-tcp     { border-top: 3px solid #3b82f6; }  /* blue   */
+.stat-card.card-udp     { border-top: 3px solid #10b981; }  /* green  */
+.stat-card.card-icmp    { border-top: 3px solid #f59e0b; }  /* amber  */
+.stat-card.card-ips     { border-top: 3px solid #a78bfa; }  /* purple */
+.stat-card.card-uptime  { border-top: 3px solid #34d399; }  /* teal   */
+
+
+/* ── 6. Traffic chart ────────────────────────────────────────────
+   The box that wraps the live line chart.                        */
+.chart-wrapper {
+    background-color: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 40px;
+    height: 300px;                     /* ← change chart height here */
+    position: relative;
+}
+
+
+/* ── 7. Alerts table ─────────────────────────────────────────────
+   The table that lists all detected threats.                     */
+.table-wrapper {
+    background-color: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 40px;
+}
+
+.table-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid #334155;
+}
+
+.alert-badge {
+    background-color: #ef4444;         /* ← alert count badge colour */
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 999px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead th {
+    background-color: #0f172a;         /* ← table header background */
+    color: #64748b;                    /* ← table header text colour */
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 12px 16px;
+    text-align: left;
+}
+
+tbody td {
+    padding: 12px 16px;
+    font-size: 14px;
+    border-bottom: 1px solid #1e293b;
+    color: #cbd5e1;                    /* ← table cell text colour */
+}
+
+tbody tr:hover {
+    background-color: #263347;         /* ← row hover colour */
+}
+
+/* Empty state row */
+.no-alerts {
+    text-align: center;
+    color: #475569;
+    padding: 40px !important;
+    font-style: italic;
+}
+
+
+/* ── 8. Alert row colours ────────────────────────────────────────
+   Each type of alert gets a different left border + tint.
+   These are set automatically by dashboard.js — just style them. */
+tr.alert-port-scan {
+    background-color: rgba(239, 68, 68, 0.08);   /* red tint   */
+    border-left: 3px solid #ef4444;
+}
+
+tr.alert-brute-force {
+    background-color: rgba(245, 158, 11, 0.08);  /* amber tint */
+    border-left: 3px solid #f59e0b;
+}
+
+tr.alert-payload-hit {
+    background-color: rgba(239, 68, 68, 0.15);   /* darker red */
+    border-left: 3px solid #dc2626;
+}
+
+
+/* ── 9. Footer ───────────────────────────────────────────────────  */
+.footer {
+    text-align: center;
+    padding: 24px;
+    color: #334155;
+    font-size: 13px;
+    border-top: 1px solid #1e293b;
+}
