@@ -3,15 +3,16 @@
  * login.php — SentinelNet Authentication
  *
  * Simple session-based login.
- * Credentials are defined as constants below — no database needed.
- * Change ADMIN_USER and ADMIN_PASS before deploying.
+ * Credentials are read securely from environment variables:
+ *   - SENTINEL_ADMIN_USER (default: admin)
+ *   - SENTINEL_ADMIN_PASS (required; set before launching dashboard)
  */
 
 session_start();
 
-/* ── credentials ─────────────────────────────────────────────── */
-define('ADMIN_USER', 'admin');
-define('ADMIN_PASS', 'sentinel2026');   /* ← change this */
+/* ── credentials from environment ────────────────────────────── */
+$adminUser = getenv('SENTINEL_ADMIN_USER') ?: 'admin';
+$adminPass = getenv('SENTINEL_ADMIN_PASS') ?: '';
 
 /* ── already logged in → go straight to dashboard ────────────── */
 if (isset($_SESSION['authenticated']) && $_SESSION['authenticated'] === true) {
@@ -22,22 +23,30 @@ if (isset($_SESSION['authenticated']) && $_SESSION['authenticated'] === true) {
 /* ── handle form submission ───────────────────────────────────── */
 $error = '';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $user = trim($_POST['username'] ?? '');
-    $pass = trim($_POST['password'] ?? '');
+if (empty($adminPass)) {
+    $error = "Sécurité : Mot de passe administrateur non configuré. Veuillez exporter la variable d'environnement SENTINEL_ADMIN_PASS sur le serveur avant de vous connecter.";
+}
 
-    if ($user === ADMIN_USER && $pass === ADMIN_PASS) {
-        /* success — create session and redirect */
-        session_regenerate_id(true);   /* prevent session fixation */
-        $_SESSION['authenticated'] = true;
-        $_SESSION['user']          = $user;
-        $_SESSION['login_time']    = time();
-        header('Location: index.php');
-        exit;
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (empty($adminPass)) {
+        $error = "Connexion verrouillée : SENTINEL_ADMIN_PASS n'est pas défini sur le serveur.";
     } else {
-        /* wrong credentials — small delay to slow brute force */
-        sleep(1);
-        $error = 'Identifiants incorrects. Veuillez réessayer.';
+        $user = trim($_POST['username'] ?? '');
+        $pass = trim($_POST['password'] ?? '');
+
+        if (hash_equals($adminUser, $user) && hash_equals($adminPass, $pass)) {
+            /* success — create session and redirect */
+            session_regenerate_id(true);   /* prevent session fixation */
+            $_SESSION['authenticated'] = true;
+            $_SESSION['user']          = $user;
+            $_SESSION['login_time']    = time();
+            header('Location: index.php');
+            exit;
+        } else {
+            /* wrong credentials — small delay to slow brute force */
+            sleep(1);
+            $error = 'Identifiants incorrects. Veuillez réessayer.';
+        }
     }
 }
 ?>
